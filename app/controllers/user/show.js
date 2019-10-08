@@ -12,7 +12,8 @@ module.exports = class Show {
    * Data base connect
    */
   getModel (res) {
-    mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true,  useUnifiedTopology: true })
+    mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    // mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
 
     this.db = mongoose.connection
     this.db.on('error', () => {
