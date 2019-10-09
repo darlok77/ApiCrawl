@@ -8,7 +8,7 @@ module.exports = class Show {
     this.run()
   }
   
-    /**
+  /**
    * Data base connect
    */
   getModel (res) {
@@ -35,7 +35,7 @@ module.exports = class Show {
   middleware () {
     this.app.get('/link/show/:id', (req, res) => {
       try {
-        this.getModel(res).findOne({id: req.params.id}, function (err, user) { 
+        this.getModel(res).findOne({idProfile: req.params.id}, function (err, user) { 
           if (err) {
             res.status(404).json({
               code: 404,

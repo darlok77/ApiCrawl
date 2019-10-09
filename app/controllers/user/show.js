@@ -24,9 +24,7 @@ module.exports = class Show {
 
       console.error(`[ERROR] user/create getModel() -> Connetion fail`)
     })
-
     const User = mongoose.model('User', Schema)
-
 
     return User
   }
