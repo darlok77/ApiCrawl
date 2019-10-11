@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const LinkSchema = new mongoose.Schema({
   idProfile: String,
-  state : Boolean
+  state : Boolean,
+  contacts: Boolean
 })
 
 LinkSchema.index({

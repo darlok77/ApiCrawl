@@ -13,8 +13,8 @@ module.exports = class Create {
    * Data base connect
    */
   getModel (res, payload) {
-    mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    // mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    // mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
 
     this.db = mongoose.connection
     this.db.on('error', () => {
@@ -23,7 +23,7 @@ module.exports = class Create {
         'message': 'Internal Server Error'
       })
 
-      console.error(`[ERROR] link/create getModel() -> Connetion fail`)
+      console.error(`[ERROR] links/create getModel() -> Connetion fail`)
     })
 
     const Link = mongoose.model('Link', Schema)
@@ -31,6 +31,7 @@ module.exports = class Create {
 
     model.idProfile = payload.idProfile
     model.state = false
+    model.contacts = false
 
     return model
   }
@@ -39,7 +40,7 @@ module.exports = class Create {
    * Middleware
    */
   middleware () {
-    this.app.post('/link/create', (req, res) => {
+    this.app.post('/links/create', (req, res) => {
       try {
 
         // Save

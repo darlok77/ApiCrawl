@@ -12,8 +12,8 @@ module.exports = class Show {
    * Data base connect
    */
   getModel (res) {
-    mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    // mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    // mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
 
     this.db = mongoose.connection
     this.db.on('error', () => {
@@ -22,7 +22,7 @@ module.exports = class Show {
         'message': 'Internal Server Error'
       })
 
-      console.error(`[ERROR] link/create getModel() -> Connetion fail`)
+      console.error(`[ERROR] links/create getModel() -> Connetion fail`)
     })
     const Link = mongoose.model('Link', Schema)
 
@@ -33,9 +33,17 @@ module.exports = class Show {
    * Middleware
    */
   middleware () {
-    this.app.get('/link/show/:id', (req, res) => {
+    this.app.get('/links/show', (req, res) => {
+      let params = {}
+      if (req.query.id) {
+        params.idProfile = req.query.id
+      }
+      if (req.query.contacts) {
+        params.contacts = req.query.contacts
+      }
+      console.log(params)
       try {
-        this.getModel(res).findOne({idProfile: req.params.id}, function (err, user) { 
+        this.getModel(res).find(params, function (err, link) { 
           if (err) {
             res.status(404).json({
               code: 404,
@@ -43,9 +51,7 @@ module.exports = class Show {
             })
           }
           else{
-            res.status(200).json(user)
-            
-            console.error(`[ERROR] link/create middleware() -> ${err}`)
+            res.status(200).json(link)
           }
         });
       } catch (e) {

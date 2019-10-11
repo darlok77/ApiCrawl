@@ -23,7 +23,7 @@ module.exports = class Search {
         'message': 'Internal Server Error'
       })
 
-      console.error(`[ERROR] link/create getModel() -> Connetion fail`)
+      console.error(`[ERROR] links/create getModel() -> Connetion fail`)
     })
 
     const Link = mongoose.model('Link', Schema)
@@ -61,7 +61,7 @@ module.exports = class Search {
 
         
       } catch (e) {
-        console.error(`[ERROR] link/search -> ${e}`)
+        console.error(`[ERROR] links/search -> ${e}`)
         res.status(400).json({
           'code': 400,
           'message': 'Bad request'
