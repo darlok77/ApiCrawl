@@ -13,13 +13,13 @@ module.exports = class Create {
   /**
    * Data base connect
    */
-  getModel (res, payload) {
+  getModel (res) {
     if (prod) {
       mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
     } else {
       mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
     }
-    
+
     this.db = mongoose.connection
     this.db.on('error', () => {
       res.status(500).json({
@@ -31,24 +31,26 @@ module.exports = class Create {
     })
 
     const Link = mongoose.model('Link', Schema)
-    const model = new Link
 
-    model.idProfile = payload.idProfile
-    model.state = false
-    model.contacts = false
-
-    return model
+    return Link
   }
 
   /**
    * Middleware
    */
   middleware () {
-    this.app.post('/links/create', (req, res) => {
+    this.app.put('/links/update', (req, res) => {
       try {
-
-        // Save
-        this.getModel(res, req.body).save((err, result) => {
+        const { idProfile, contacts, state } = req.body
+        const newLink = {}
+        if (contacts) {
+          newLink['contacts'] = contacts
+        }
+        if (state) {
+          newLink['state'] = state
+        }
+        // Update
+        this.getModel(res).update({ idProfile }, newLink, (err, result) => {
           if (err) {
             res.status(500).json({
               'code': 500,

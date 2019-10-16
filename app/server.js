@@ -37,9 +37,12 @@ module.exports = class Server {
     new routes.user.CreateUser(this.app)
     new routes.user.ShowUser(this.app)
     new routes.user.SearchUser(this.app)
+    new routes.user.UpdateUser(this.app)
+
     new routes.link.CreateLink(this.app)
-    new routes.link.UpdateLink(this.app)
+    new routes.link.SearchLink(this.app)
     new routes.link.ShowLink(this.app)
+    new routes.link.UpdateLink(this.app)
 
     // If route not exist
     this.app.use((req, res) => {

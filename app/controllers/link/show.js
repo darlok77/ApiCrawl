@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = require('../../models/links.js')
+const prod = true
 
 module.exports = class Show {
   constructor (app) {
@@ -7,13 +8,16 @@ module.exports = class Show {
 
     this.run()
   }
-  
+
   /**
    * Data base connect
    */
   getModel (res) {
-    // mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    if (prod) {
+      mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    } else {
+      mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    }
 
     this.db = mongoose.connection
     this.db.on('error', () => {
@@ -38,12 +42,15 @@ module.exports = class Show {
       if (req.query.id) {
         params.idProfile = req.query.id
       }
+      if (req.query.state) {
+        params.state = req.query.state
+      }
       if (req.query.contacts) {
         params.contacts = req.query.contacts
       }
       console.log(params)
       try {
-        this.getModel(res).find(params, function (err, link) { 
+        this.getModel(res).find(params, function (err, link) {
           if (err) {
             res.status(404).json({
               code: 404,

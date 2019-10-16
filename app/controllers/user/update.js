@@ -1,7 +1,6 @@
 // Dependencies
 const mongoose = require('mongoose')
-const Schema = require('../../models/links.js')
-const prod = true
+const Schema = require('../../models/users.js')
 
 module.exports = class Create {
   constructor (app) {
@@ -14,12 +13,9 @@ module.exports = class Create {
    * Data base connect
    */
   getModel (res, payload) {
-    if (prod) {
-      mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    } else {
-      mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    }
-    
+    mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    // mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+
     this.db = mongoose.connection
     this.db.on('error', () => {
       res.status(500).json({
@@ -27,15 +23,23 @@ module.exports = class Create {
         'message': 'Internal Server Error'
       })
 
-      console.error(`[ERROR] links/create getModel() -> Connetion fail`)
+      console.error(`[ERROR] user/create getModel() -> Connetion fail`)
     })
 
-    const Link = mongoose.model('Link', Schema)
-    const model = new Link
+    const User = mongoose.model('User', Schema)
+    const model = new User
 
     model.idProfile = payload.idProfile
-    model.state = false
-    model.contacts = false
+    model.lastname = payload.lastname
+    model.firstname = payload.firstname
+    model.photo = payload.photo
+    model.url = payload.url
+    model.description = payload.description
+    model.career = payload.career
+    model.skills = payload.skills
+    model.languages = payload.languages
+    model.hobbies = payload.hobbies
+    model.contacts = payload.contacts
 
     return model
   }
@@ -44,7 +48,7 @@ module.exports = class Create {
    * Middleware
    */
   middleware () {
-    this.app.post('/links/create', (req, res) => {
+    this.app.post('/user/create', (req, res) => {
       try {
 
         // Save
@@ -61,7 +65,7 @@ module.exports = class Create {
           res.status(200).json(result)
         })
       } catch (e) {
-        console.error(`[ERROR] link/create -> ${e}`)
+        console.error(`[ERROR] user/create -> ${e}`)
         res.status(400).json({
           'code': 400,
           'message': 'Bad request'
