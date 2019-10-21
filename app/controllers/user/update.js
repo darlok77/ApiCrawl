@@ -2,7 +2,7 @@
 const mongoose = require('mongoose')
 const Schema = require('../../models/users.js')
 
-module.exports = class Create {
+module.exports = class Update {
   constructor (app) {
     this.app = app
 

@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const Schema = require('../../models/links.js')
 const prod = true
 
-module.exports = class Create {
+module.exports = class Update {
   constructor (app) {
     this.app = app
 
