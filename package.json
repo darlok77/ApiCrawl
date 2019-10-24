@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "yarn install && yarn start",
-    "start": "node index.js"
+    "build": "yarn install && yarn prod",
+    "prod": "NODE_ENV=prod node index.js",
+    "dev": "NODE_ENV=dev node index.js"
   },
   "author": "",
   "license": "ISC",

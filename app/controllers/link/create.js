@@ -1,7 +1,7 @@
 // Dependencies
 const mongoose = require('mongoose')
 const Schema = require('../../models/links.js')
-const prod = true
+const mongolink = process.env.NODE_ENV === 'prod' ? 'mongodb://mongo:27017/ApiCrawl' : 'mongodb://localhost:27017/ApiCrawl'
 
 module.exports = class Create {
   constructor (app) {
@@ -14,12 +14,8 @@ module.exports = class Create {
    * Data base connect
    */
   getModel (res, payload) {
-    if (prod) {
-      mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    } else {
-      mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    }
-    
+    mongoose.connect(mongolink, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+
     this.db = mongoose.connection
     this.db.on('error', () => {
       res.status(500).json({

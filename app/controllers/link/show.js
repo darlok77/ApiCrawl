@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = require('../../models/links.js')
-const prod = true
+const mongolink = process.env.NODE_ENV === 'prod' ? 'mongodb://mongo:27017/ApiCrawl' : 'mongodb://localhost:27017/ApiCrawl'
 
 module.exports = class Show {
   constructor (app) {
@@ -13,11 +13,7 @@ module.exports = class Show {
    * Data base connect
    */
   getModel (res) {
-    if (prod) {
-      mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    } else {
-      mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    }
+    mongoose.connect(mongolink, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
 
     this.db = mongoose.connection
     this.db.on('error', () => {

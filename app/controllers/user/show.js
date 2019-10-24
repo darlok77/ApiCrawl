@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = require('../../models/users.js')
+const mongolink = process.env.NODE_ENV === 'prod' ? 'mongodb://mongo:27017/ApiCrawl' : 'mongodb://localhost:27017/ApiCrawl'
 
 module.exports = class Show {
   constructor (app) {
@@ -7,13 +8,12 @@ module.exports = class Show {
 
     this.run()
   }
-  
+
     /**
    * Data base connect
    */
   getModel (res) {
-    mongoose.connect('mongodb://mongo:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    // mongoose.connect('mongodb://localhost:27017/ApiCrawl', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    mongoose.connect(mongolink, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
 
     this.db = mongoose.connection
     this.db.on('error', () => {
@@ -35,7 +35,7 @@ module.exports = class Show {
   middleware () {
     this.app.get('/user/show/:id', (req, res) => {
       try {
-        this.getModel(res).findOne({id: req.params.id}, function (err, user) { 
+        this.getModel(res).findOne({id: req.params.id}, function (err, user) {
           if (err) {
             res.status(404).json({
               code: 404,
@@ -44,7 +44,7 @@ module.exports = class Show {
           }
           else{
             res.status(200).json(user)
-            
+
             console.error(`[ERROR] user/create middleware() -> ${err}`)
           }
         });
